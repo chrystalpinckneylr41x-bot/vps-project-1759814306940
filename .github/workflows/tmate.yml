@@ -48,11 +48,7 @@ jobs:
         Write-Host "📥 Installing Visual Studio Code..."
         choco install vscode -y
 
-        # 4. Cài đặt Zalo
-        Write-Host "📥 Installing Zalo..."
-        choco install zalo -y
-
-        # 5. Cài đặt Telegram
+        # 4. Cài đặt Telegram
         Write-Host "📥 Installing Telegram..."
         choco install telegram.desktop -y
 
@@ -64,8 +60,9 @@ jobs:
           Invoke-WebRequest -Uri "https://www.tightvnc.com/download/2.8.63/tightvnc-2.8.63-gpl-setup-64bit.msi" -OutFile "tightvnc-setup.msi" -TimeoutSec 60
           Write-Host "✅ TightVNC downloaded"
           
-          Start-Process msiexec.exe -Wait -ArgumentList '/i tightvnc-setup.msi /quiet /norestart ADDLOCAL="Server" SERVER_REGISTER_AS_SERVICE=1 SERVER_ADD_FIREWALL_EXCEPTION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1 SET_PASSWORD=thien SET_ACCEPTHTTPCONNECTIONS=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=1 SET_ALLOWLOOPBACK=1 VALUE_OF_ALLOWLOOPBACK=1'
-          Write-Host "✅ TightVNC installed"
+          # --- THAY ĐỔI: Cài đặt VNC không cần mật khẩu ---
+          Start-Process msiexec.exe -Wait -ArgumentList '/i tightvnc-setup.msi /quiet /norestart ADDLOCAL="Server" SERVER_REGISTER_AS_SERVICE=1 SERVER_ADD_FIREWALL_EXCEPTION=1 SET_USEVNCAUTHENTICATION=0 VALUE_OF_USEVNCAUTHENTICATION=0 SET_ACCEPTHTTPCONNECTIONS=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=1 SET_ALLOWLOOPBACK=1 VALUE_OF_ALLOWLOOPBACK=1'
+          Write-Host "✅ TightVNC installed without password."
           
           Write-Host "🔧 Enabling loopback connections in TightVNC registry..."
           Set-ItemProperty -Path "HKLM:\SOFTWARE\TightVNC\Server" -Name "AllowLoopback" -Value 1 -ErrorAction SilentlyContinue
@@ -389,7 +386,7 @@ jobs:
         }
         
         Write-Host "🚀 VPS Session Started - $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-        Write-Host "🌌 Access noVNC via remote-link.txt URL (Password: hieudz)"
+        Write-Host "🌌 Access noVNC via remote-link.txt URL"
         
         mkdir -Force ".backup"
         
